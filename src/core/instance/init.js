@@ -12,7 +12,10 @@ import { extend, mergeOptions, formatComponentName } from '../util/index'
 
 let uid = 0
 
+// flow.js 语法 (与ts 很像, 但不建议学习， 已经被官方抛弃, 建议学习ts TypeScript)
+// 各种初始化
 export function initMixin (Vue: Class<Component>) {
+  // 原型链上定义 _init
   Vue.prototype._init = function (options?: Object) {
     const vm: Component = this
     // a uid
@@ -49,13 +52,28 @@ export function initMixin (Vue: Class<Component>) {
     }
     // expose real self
     vm._self = vm
+
+    // 初始化生命周期
     initLifecycle(vm)
+    // 初始化事件
     initEvents(vm)
+    // 初始化渲染
+    // slots & createElement
     initRender(vm)
+    // 初始化生命周期钩子
+    // 第一个生命周期
+    // data props methods 好像还没有
     callHook(vm, 'beforeCreate')
+    // 初始化injections
+
     initInjections(vm) // resolve injections before data/props
+    // 初始化state !!!!
+    // data props methods computed watch
     initState(vm)
+    // 初始化provide
     initProvide(vm) // resolve provide after data/props
+    // 初始化生命周期
+    // 从created生命周期的时候 可以获取provide data props methods computed watch
     callHook(vm, 'created')
 
     /* istanbul ignore if */
@@ -65,7 +83,9 @@ export function initMixin (Vue: Class<Component>) {
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
 
+    //  如果option里有el:'#id' 就调用$amount, 与手动调用$mount相同
     if (vm.$options.el) {
+      // $mount挂载
       vm.$mount(vm.$options.el)
     }
   }

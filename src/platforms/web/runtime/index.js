@@ -1,5 +1,6 @@
 /* @flow */
 
+// @@
 import Vue from 'core/index'
 import config from 'core/config'
 import { extend, noop } from 'shared/util'
@@ -34,6 +35,8 @@ extend(Vue.options.components, platformComponents)
 Vue.prototype.__patch__ = inBrowser ? patch : noop
 
 // public mount method
+// @@ 是否compile template or render
+// @@ 未compile
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
@@ -73,4 +76,5 @@ if (inBrowser) {
   }, 0)
 }
 
+// @@2. 真正对外 暴露的Vue
 export default Vue

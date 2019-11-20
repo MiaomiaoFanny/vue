@@ -8,6 +8,7 @@ if (!fs.existsSync('dist')) {
   fs.mkdirSync('dist')
 }
 
+// config.js
 let builds = require('./config').getAllBuilds()
 
 // filter builds via command line arg
@@ -23,6 +24,7 @@ if (process.argv[2]) {
   })
 }
 
+// 构建入口
 build(builds)
 
 function build (builds) {

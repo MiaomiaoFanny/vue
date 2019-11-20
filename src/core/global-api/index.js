@@ -18,6 +18,7 @@ import {
   defineReactive
 } from '../util/index'
 
+// !!!
 export function initGlobalAPI (Vue: GlobalAPI) {
   // config
   const configDef = {}
@@ -62,7 +63,9 @@ export function initGlobalAPI (Vue: GlobalAPI) {
 
   extend(Vue.options.components, builtInComponents)
 
+  {/* Vue.use */}
   initUse(Vue)
+  {/* 把传递进来的option合并 */}
   initMixin(Vue)
   initExtend(Vue)
   initAssetRegisters(Vue)

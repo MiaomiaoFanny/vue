@@ -9,6 +9,7 @@ const version = process.env.VERSION || require('../package.json').version
 const weexVersion = process.env.WEEX_VERSION || require('../packages/weex-vue-framework/package.json').version
 const featureFlags = require('./feature-flags')
 
+// 版本 时间
 const banner =
   '/*!\n' +
   ` * Vue.js v${version}\n` +
@@ -36,6 +37,8 @@ const resolve = p => {
 }
 
 const builds = {
+  // ??? runtime是什么意思
+  // ??? cjs
   // Runtime only (CommonJS). Used by bundlers e.g. Webpack & Browserify
   'web-runtime-cjs-dev': {
     entry: resolve('web/entry-runtime.js'),
@@ -53,6 +56,7 @@ const builds = {
   },
   // Runtime+compiler CommonJS build (CommonJS)
   'web-full-cjs-dev': {
+    //!!! src/platforms/web/...
     entry: resolve('web/entry-runtime-with-compiler.js'),
     dest: resolve('dist/vue.common.dev.js'),
     format: 'cjs',
@@ -61,6 +65,7 @@ const builds = {
     banner
   },
   'web-full-cjs-prod': {
+    //!!! src/platforms/web/...
     entry: resolve('web/entry-runtime-with-compiler.js'),
     dest: resolve('dist/vue.common.prod.js'),
     format: 'cjs',
@@ -75,6 +80,7 @@ const builds = {
     format: 'es',
     banner
   },
+  // !!!
   // Runtime+compiler ES modules build (for bundlers)
   'web-full-esm': {
     entry: resolve('web/entry-runtime-with-compiler.js'),
@@ -213,6 +219,7 @@ const builds = {
   }
 }
 
+// 加工 builds, 生成build配置文件
 function genConfig (name) {
   const opts = builds[name]
   const config = {
@@ -267,5 +274,6 @@ if (process.env.TARGET) {
   module.exports = genConfig(process.env.TARGET)
 } else {
   exports.getBuild = genConfig
+  // config.js > getAllBuilds
   exports.getAllBuilds = () => Object.keys(builds).map(genConfig)
 }

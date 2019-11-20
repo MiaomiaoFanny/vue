@@ -29,6 +29,7 @@ export function setActiveInstance(vm: Component) {
   }
 }
 
+// 初始化生命周期
 export function initLifecycle (vm: Component) {
   const options = vm.$options
 
@@ -41,6 +42,7 @@ export function initLifecycle (vm: Component) {
     parent.$children.push(vm)
   }
 
+  // 存储$parent $root $children...
   vm.$parent = parent
   vm.$root = parent ? parent.$root : vm
 
@@ -55,7 +57,9 @@ export function initLifecycle (vm: Component) {
   vm._isBeingDestroyed = false
 }
 
+// 生命周期
 export function lifecycleMixin (Vue: Class<Component>) {
+  // 更新
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
     const prevEl = vm.$el
@@ -87,6 +91,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // updated in a parent's updated hook.
   }
 
+  // 强制更新
   Vue.prototype.$forceUpdate = function () {
     const vm: Component = this
     if (vm._watcher) {
@@ -94,6 +99,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     }
   }
 
+  // 销毁
   Vue.prototype.$destroy = function () {
     const vm: Component = this
     if (vm._isBeingDestroyed) {
@@ -333,9 +339,14 @@ export function deactivateChildComponent (vm: Component, direct?: boolean) {
   }
 }
 
+// 
 export function callHook (vm: Component, hook: string) {
   // #7573 disable dep collection when invoking lifecycle hooks
   pushTarget()
+  /* 
+  由于内部可以通过mixin扩展这些生命周期, 所以都处理成数组了
+  例子: callHook(vm, 'beforeCreate') / new Vue({ beforeCreate() {} })
+  */
   const handlers = vm.$options[hook]
   const info = `${hook} hook`
   if (handlers) {

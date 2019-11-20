@@ -6,6 +6,7 @@ import { makeMap } from 'shared/util'
 
 const splitRE = /\r?\n/g
 const replaceRE = /./g
+// 三个标签
 const isSpecialTag = makeMap('script,style,template', true)
 
 /**

@@ -4,6 +4,7 @@ import config from 'core/config'
 import { warn, cached } from 'core/util/index'
 import { mark, measure } from 'core/util/perf'
 
+// @@
 import Vue from './runtime/index'
 import { query } from './util/index'
 import { compileToFunctions } from './compiler/index'
@@ -15,6 +16,8 @@ const idToTemplate = cached(id => {
 })
 
 const mount = Vue.prototype.$mount
+// @@是否compile template or render
+// @@已compile
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
@@ -98,4 +101,5 @@ function getOuterHTML (el: Element): string {
 
 Vue.compile = compileToFunctions
 
+// @@1. 真正对外 暴露的Vue
 export default Vue
