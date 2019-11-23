@@ -54,6 +54,7 @@ const builds = {
     env: 'production',
     banner
   },
+
   // Runtime+compiler CommonJS build (CommonJS)
   'web-full-cjs-dev': {
     //!!! src/platforms/web/...
@@ -73,6 +74,7 @@ const builds = {
     alias: { he: './entity-decoder' },
     banner
   },
+
   // Runtime only ES modules build (for bundlers)
   'web-runtime-esm': {
     entry: resolve('web/entry-runtime.js'),
@@ -80,6 +82,7 @@ const builds = {
     format: 'es',
     banner
   },
+
   // !!!
   // Runtime+compiler ES modules build (for bundlers)
   'web-full-esm': {
@@ -89,6 +92,7 @@ const builds = {
     alias: { he: './entity-decoder' },
     banner
   },
+
   // Runtime+compiler ES modules build (for direct import in browser)
   'web-full-esm-browser-dev': {
     entry: resolve('web/entry-runtime-with-compiler.js'),
@@ -109,6 +113,7 @@ const builds = {
     alias: { he: './entity-decoder' },
     banner
   },
+
   // runtime-only build (Browser)
   'web-runtime-dev': {
     entry: resolve('web/entry-runtime.js'),
@@ -125,6 +130,7 @@ const builds = {
     env: 'production',
     banner
   },
+
   // Runtime+compiler development build (Browser)
   'web-full-dev': {
     entry: resolve('web/entry-runtime-with-compiler.js'),
@@ -143,6 +149,7 @@ const builds = {
     alias: { he: './entity-decoder' },
     banner
   },
+
   // Web compiler (CommonJS).
   'web-compiler': {
     entry: resolve('web/entry-compiler.js'),
@@ -194,6 +201,7 @@ const builds = {
     format: 'cjs',
     external: Object.keys(require('../packages/vue-server-renderer/package.json').dependencies)
   },
+
   // Weex runtime factory
   'weex-factory': {
     weex: true,

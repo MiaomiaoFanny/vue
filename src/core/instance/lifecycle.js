@@ -34,11 +34,14 @@ export function initLifecycle (vm: Component) {
   const options = vm.$options
 
   // locate first non-abstract parent
+  // ?? abstract
   let parent = options.parent
   if (parent && !options.abstract) {
+    // ?? 找到最上层parent吗 ?
     while (parent.$options.abstract && parent.$parent) {
       parent = parent.$parent
     }
+    // 把自己存到parent
     parent.$children.push(vm)
   }
 
@@ -59,7 +62,8 @@ export function initLifecycle (vm: Component) {
 
 // 生命周期
 export function lifecycleMixin (Vue: Class<Component>) {
-  // 更新
+  // ?? 更新 做了什么?
+  // !!! 重点
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
     const prevEl = vm.$el
@@ -91,7 +95,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // updated in a parent's updated hook.
   }
 
-  // 强制更新
+  // 强制更新 执行_watcher.update()
   Vue.prototype.$forceUpdate = function () {
     const vm: Component = this
     if (vm._watcher) {

@@ -1,4 +1,5 @@
 /* @flow */
+/* define $mounte */
 
 import config from 'core/config'
 import { warn, cached } from 'core/util/index'
@@ -25,6 +26,7 @@ Vue.prototype.$mount = function (
   el = el && query(el)
 
   /* istanbul ignore if */
+  // 不能挂载在body和html上
   if (el === document.body || el === document.documentElement) {
     process.env.NODE_ENV !== 'production' && warn(
       `Do not mount Vue to <html> or <body> - mount to normal elements instead.`

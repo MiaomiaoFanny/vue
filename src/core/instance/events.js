@@ -10,6 +10,7 @@ import {
 import { updateListeners } from '../vdom/helpers/index'
 
 // 初始化事件
+// 创建一个装event的数组_events
 export function initEvents (vm: Component) {
   // vm._events = {} 简洁, 有原型链 vm._events > Object > null
   // vm._event = new Object() 等同于 = {}
@@ -57,9 +58,9 @@ export function updateComponentListeners (
 
 // 事件
 export function eventsMixin (Vue: Class<Component>) {
-  // 内部调用 都是 hook: 开头
+  // !内部调用 都是 hook: 开头 如 $emit('hook:beforeDestroy') 在callHook(vm, 'beforeDestroy')时发生
   const hookRE = /^hook:/
-  // 添加事件监听
+  // !添加事件监听 将event和fn添加到_events
   Vue.prototype.$on = function (event: string | Array<string>, fn: Function): Component {
     const vm: Component = this
     if (Array.isArray(event)) {
@@ -68,6 +69,7 @@ export function eventsMixin (Vue: Class<Component>) {
       }
     } else {
       // vm是当前的viewModel
+      // 把事件event添加push到_events数组里
       (vm._events[event] || (vm._events[event] = [])).push(fn)
       // optimize hook:event cost by using a boolean flag marked at registration
       // instead of a hash lookup
@@ -84,6 +86,7 @@ export function eventsMixin (Vue: Class<Component>) {
     const vm: Component = this
     function on () {
       // 只执行一次, 执行完取消监听($off)
+      // !$emit时执行这里, 先将事件取消监听, 再执行fn (用过一次就丢弃)
       vm.$off(event, on)
       fn.apply(vm, arguments)
     }
@@ -95,12 +98,13 @@ export function eventsMixin (Vue: Class<Component>) {
   // 取消监听
   Vue.prototype.$off = function (event?: string | Array<string>, fn?: Function): Component {
     const vm: Component = this
-    // all
+    // !clear all events 不传参表示清空所有事件监听
     if (!arguments.length) {
       vm._events = Object.create(null)
       return vm
     }
     // array of events
+    // !clear fn of these events
     if (Array.isArray(event)) {
       for (let i = 0, l = event.length; i < l; i++) {
         vm.$off(event[i], fn)
@@ -112,15 +116,18 @@ export function eventsMixin (Vue: Class<Component>) {
     if (!cbs) {
       return vm
     }
+    // !clear this event 不传 fn 表示 清空该事件所有cb
     if (!fn) {
       vm._events[event] = null
       return vm
     }
     // specific handler
+    // !clear fn of this event 删除这个event里的这个fn
     let cb
     let i = cbs.length
     while (i--) {
       cb = cbs[i]
+      // cb.fn === fn 是为 $once而设  on.fn = fn
       if (cb === fn || cb.fn === fn) {
         // 从事件中删除
         cbs.splice(i, 1)

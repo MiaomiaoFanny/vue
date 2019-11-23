@@ -1,4 +1,5 @@
 /* @flow */
+/* define $mount */
 
 // @@
 import Vue from 'core/index'

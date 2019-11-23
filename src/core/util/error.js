@@ -42,7 +42,9 @@ export function invokeWithErrorHandling (
 ) {
   let res
   try {
+    // 执行监听事件的cb
     res = args ? handler.apply(context, args) : handler.call(context)
+    // 分析执行结果
     if (res && !res._isVue && isPromise(res) && !res._handled) {
       res.catch(e => handleError(e, vm, info + ` (Promise/async)`))
       // issue #9511

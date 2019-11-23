@@ -4,13 +4,16 @@ const zlib = require('zlib')
 const rollup = require('rollup')
 const terser = require('terser')
 
+// 1. 创建dist文件夹
 if (!fs.existsSync('dist')) {
   fs.mkdirSync('dist')
 }
 
+// 2. 获取所有的build配置
 // config.js
 let builds = require('./config').getAllBuilds()
 
+// 3. 区别 命令行 还是 代码 
 // filter builds via command line arg
 if (process.argv[2]) {
   const filters = process.argv[2].split(',')
@@ -27,6 +30,7 @@ if (process.argv[2]) {
 // 构建入口
 build(builds)
 
+// 循环每一个build配置
 function build (builds) {
   let built = 0
   const total = builds.length
@@ -42,10 +46,12 @@ function build (builds) {
   next()
 }
 
+// 根据某个具体的配置 进行build动作
 function buildEntry (config) {
   const output = config.output
   const { file, banner } = output
   const isProd = /(min|prod)\.js$/.test(file)
+  // ?? rollup 模块打包器
   return rollup.rollup(config)
     .then(bundle => bundle.generate(output))
     .then(({ output: [{ code }] }) => {

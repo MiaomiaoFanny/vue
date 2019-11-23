@@ -15,7 +15,6 @@ let uid = 0
 // flow.js 语法 (与ts 很像, 但不建议学习， 已经被官方抛弃, 建议学习ts TypeScript)
 // 各种初始化
 export function initMixin (Vue: Class<Component>) {
-  // 原型链上定义 _init
   Vue.prototype._init = function (options?: Object) {
     const vm: Component = this
     // a uid
@@ -53,14 +52,10 @@ export function initMixin (Vue: Class<Component>) {
     // expose real self
     vm._self = vm
 
-    // 初始化生命周期
     initLifecycle(vm)
-    // 初始化事件
     initEvents(vm)
-    // 初始化渲染
     // slots & createElement
     initRender(vm)
-    // 初始化生命周期钩子
     // 第一个生命周期
     // data props methods 好像还没有
     callHook(vm, 'beforeCreate')
