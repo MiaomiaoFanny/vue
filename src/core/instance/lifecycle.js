@@ -63,7 +63,7 @@ export function initLifecycle (vm: Component) {
 // 生命周期
 export function lifecycleMixin (Vue: Class<Component>) {
   // ?? 更新 做了什么?
-  // !!! 重点
+  // !!! 重点 更新虚拟dom
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
     const prevEl = vm.$el
@@ -77,6 +77,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
     } else {
       // updates
+      // ! 做虚拟dom的diff diff算法在__patch__里学习
       vm.$el = vm.__patch__(prevVnode, vnode)
     }
     restoreActiveInstance()
@@ -148,6 +149,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
   }
 }
 
+// 挂载组件
 export function mountComponent (
   vm: Component,
   el: ?Element,
@@ -196,6 +198,8 @@ export function mountComponent (
       measure(`vue ${name} patch`, startTag, endTag)
     }
   } else {
+    // !_render 初始化虚拟dom
+    // !_update 更新虚拟dom
     updateComponent = () => {
       vm._update(vm._render(), hydrating)
     }
@@ -204,9 +208,11 @@ export function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+  // !监听器
   new Watcher(vm, updateComponent, noop, {
     before () {
       if (vm._isMounted && !vm._isDestroyed) {
+        // !数据有更新, 执行hook:beforeUpdate
         callHook(vm, 'beforeUpdate')
       }
     }
@@ -222,6 +228,7 @@ export function mountComponent (
   return vm
 }
 
+// 挂载子组件
 export function updateChildComponent (
   vm: Component,
   propsData: ?Object,
@@ -343,7 +350,7 @@ export function deactivateChildComponent (vm: Component, direct?: boolean) {
   }
 }
 
-// 
+// 调用生命周期事件 hook:xxx
 export function callHook (vm: Component, hook: string) {
   // #7573 disable dep collection when invoking lifecycle hooks
   pushTarget()

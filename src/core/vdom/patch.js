@@ -122,6 +122,7 @@ export function createPatchFunction (backend) {
 
   let creatingElmInVPre = 0
 
+  // 通过虚拟dom创建真实的DOM并插入到父节点中
   function createElm (
     vnode,
     insertedVnodeQueue,
@@ -207,6 +208,7 @@ export function createPatchFunction (backend) {
     }
   }
 
+  // 尝试创建子节点
   function createComponent (vnode, insertedVnodeQueue, parentElm, refElm) {
     let i = vnode.data
     if (isDef(i)) {
@@ -229,6 +231,7 @@ export function createPatchFunction (backend) {
     }
   }
 
+  // 初始化组件
   function initComponent (vnode, insertedVnodeQueue) {
     if (isDef(vnode.data.pendingInsert)) {
       insertedVnodeQueue.push.apply(insertedVnodeQueue, vnode.data.pendingInsert)
@@ -269,6 +272,7 @@ export function createPatchFunction (backend) {
     insert(parentElm, vnode.elm, refElm)
   }
 
+  // dom插入
   function insert (parent, elm, ref) {
     if (isDef(parent)) {
       if (isDef(ref)) {
@@ -281,6 +285,7 @@ export function createPatchFunction (backend) {
     }
   }
 
+  // 创建子元素 实际上是遍历子节点 递归调用 createElm(DFS)
   function createChildren (vnode, children, insertedVnodeQueue) {
     if (Array.isArray(children)) {
       if (process.env.NODE_ENV !== 'production') {
@@ -301,6 +306,7 @@ export function createPatchFunction (backend) {
     return isDef(vnode.tag)
   }
 
+  // 创建create钩子 vnode进队列
   function invokeCreateHooks (vnode, insertedVnodeQueue) {
     for (let i = 0; i < cbs.create.length; ++i) {
       cbs.create[i](emptyNode, vnode)
@@ -421,6 +427,7 @@ export function createPatchFunction (backend) {
       checkDuplicateKeys(newCh)
     }
 
+    // !!! 重点 复杂
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (isUndef(oldStartVnode)) {
         oldStartVnode = oldCh[++oldStartIdx] // Vnode has been moved left

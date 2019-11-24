@@ -116,6 +116,7 @@ function initData (vm: Component) {
     : data || {}
   if (!isPlainObject(data)) {
     data = {}
+    // component里的data必须是function, 避免组件间数据指向同一个引用
     process.env.NODE_ENV !== 'production' && warn(
       'data functions should return an object:\n' +
       'https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function',
@@ -129,6 +130,7 @@ function initData (vm: Component) {
   let i = keys.length
   while (i--) {
     const key = keys[i]
+    // props keys methods 不能重名
     if (process.env.NODE_ENV !== 'production') {
       if (methods && hasOwn(methods, key)) {
         warn(
@@ -144,6 +146,7 @@ function initData (vm: Component) {
         vm
       )
     } else if (!isReserved(key)) {
+      // 不是$ _ 开头 (isReserved 是否是保留参数名$xx _xx)
       proxy(vm, `_data`, key)
     }
   }
@@ -270,12 +273,14 @@ function initMethods (vm: Component, methods: Object) {
           vm
         )
       }
+      // method和props不能重名
       if (props && hasOwn(props, key)) {
         warn(
           `Method "${key}" has already been defined as a prop.`,
           vm
         )
       }
+      // 不能和其他已有属性同名
       if ((key in vm) && isReserved(key)) {
         warn(
           `Method "${key}" conflicts with an existing Vue instance method. ` +
@@ -283,6 +288,7 @@ function initMethods (vm: Component, methods: Object) {
         )
       }
     }
+    // method绑定到vm上, 只允许function,否则变成一个空函数
     vm[key] = typeof methods[key] !== 'function' ? noop : bind(methods[key], vm)
   }
 }

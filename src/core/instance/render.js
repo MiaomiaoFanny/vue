@@ -73,7 +73,20 @@ export function renderMixin (Vue: Class<Component>) {
     return nextTick(fn, this)
   }
 
-  // !!!重点
+  // !!!重点 初始化, 返回虚拟dom vnode
+  // 虚拟dom: 用js描述真实dom
+  /* {
+    type: 'div',
+    attrs: {
+      id: '',
+      class: '',
+    },
+    slot,
+    key,
+    children: [
+
+    ]
+  } */
   Vue.prototype._render = function (): VNode {
     const vm: Component = this
     const { render, _parentVnode } = vm.$options

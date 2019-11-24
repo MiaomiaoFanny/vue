@@ -36,6 +36,7 @@ Vue.prototype.$mount = function (
 
   const options = this.$options
   // resolve template/el and convert to render function
+  // render 比 template 优先级高
   if (!options.render) {
     let template = options.template
     if (template) {
@@ -62,11 +63,13 @@ Vue.prototype.$mount = function (
       template = getOuterHTML(el)
     }
     if (template) {
+      // 获取到模板字符串了 `<div>Hello<span>{{name}}</span></div>`
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
         mark('compile')
       }
 
+      // 编译模板 返回render函数
       const { render, staticRenderFns } = compileToFunctions(template, {
         outputSourceRange: process.env.NODE_ENV !== 'production',
         shouldDecodeNewlines,

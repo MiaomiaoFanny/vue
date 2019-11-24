@@ -15,12 +15,8 @@ function Vue (options) {
   // _init 一定是在原型链上 defined in initMixin
   this._init(options)
 }
-/* src\core\index.js */
-// initGlobalAPI(Vue)
-
 /* Initialization */
 //! Vue.prototype._init(options)
-{
   // ! 挂载$options
   //! initProxy(vm) // dev
   //! initLifecycle(vm)
@@ -38,26 +34,30 @@ function Vue (options) {
       // ! resolveInject(vm.$options.inject, vm) 查找 _provided 拿到keys
       // ! defineReactive 重点 多处见到
   //!!!!! initState(vm) 非常重要的函数
-  {
       // 初始化 _watchers
+
       // 拿到配置里的 $options.props
-      initProps(vm, opts.props)
+        // initProps(vm, opts.props)
+
       // 拿到配置里的 $options.methods
-      initMethods(vm, opts.methods)
+        // initMethods(vm, opts.methods)
+
       // 拿到配置里的 $options.data
-      initData(vm)
-      observe(vm._data = {}, true /* asRootData */ ) //if (!$options.data)
+        // initData(vm)
+        // observe(vm._data = {}, true /* asRootData */ ) //if (!$options.data)
+
       // 拿到配置里的 $options.computed
-      initComputed(vm, opts.computed)
+        // initComputed(vm, opts.computed)
+
       // 拿到配置里的 $options.watch
-      initWatch(vm, opts.watch)
-  }
+        // initWatch(vm, opts.watch)
   //! initProvide(vm) // resolve provide after data/props
       // 拿到配置里的 $options.provide 挂载到 _provided
   //! callHook(vm, 'created')
       // TODO 此时可以获取 inject provide props methods data computed watch 了, 测试一下
-}
+//  首先挂载一些必要的函数, 在 new Vue时执行_init 加载数据, 配置, 触发(emit)生命周期函数hook:xxx
 initMixin(Vue)
+    // Vue.prototype._init
 
 // 挂载 $data $props $set $delete $watch
 stateMixin(Vue)
@@ -73,6 +73,17 @@ lifecycleMixin(Vue)
 // !!!!!_render 重点
 renderMixin(Vue)
 
+/* src\core\index.js > src\core\global-api\index.js */
+// initGlobalAPI(Vue)
+    // 挂载 config util set delete nextTick options
+    // Vue.util = { warn, extend, mergeOptions, defineReactive }
+    //   initUse(Vue) // Vue.use
+    //   initMixin(Vue) // Vue.mixin
+    //   initExtend(Vue) // Vue.extend
+    //   initAssetRegisters(Vue) // Vue.options.components/directives/filters
+
+// platform处 挂载 $mount 函数
 // !!!!! $mount 重点
+    // mountComponent(this, el, hydrating)
 // @@4. 真正对外 暴露的Vue
 export default Vue

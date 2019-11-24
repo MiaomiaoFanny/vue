@@ -108,6 +108,7 @@ function copyAugment (target: Object, src: Object, keys: Array<string>) {
  * or the existing observer if the value already has one.
  */
 export function observe (value: any, asRootData: ?boolean): Observer | void {
+  // 是对象 且 不是VNode实例
   if (!isObject(value) || value instanceof VNode) {
     return
   }
@@ -154,11 +155,14 @@ export function defineReactive (
   }
 
   let childOb = !shallow && observe(val)
+  // !!!响应式原理
+  // defineProperty < defineReactive < Observer < observe
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
       const value = getter ? getter.call(obj) : val
+      // ?! 这里开始不懂了
       if (Dep.target) {
         dep.depend()
         if (childOb) {
@@ -188,6 +192,7 @@ export function defineReactive (
         val = newVal
       }
       childOb = !shallow && observe(newVal)
+      // ?! 通知外面修改dom
       dep.notify()
     }
   })
